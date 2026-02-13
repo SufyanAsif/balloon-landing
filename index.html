@@ -1,144 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pop The Balloon 🎈</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Valentine Memories ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
 
 <style>
-body {
-  margin: 0;
-  overflow: hidden;
-  background: linear-gradient(to top, #89cff0, #ffffff);
-  font-family: Arial, sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
+body {
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(180deg, #ff9ecf, #ff4d88);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+/* Sparkles */
+.sparkle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: twinkle 2s infinite alternate;
+    z-index: 0;
+}
+
+@keyframes twinkle {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+}
+
+/* Fade in text */
+.content {
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Balloons */
 .balloon {
-  position: absolute;
-  width: 80px;
-  height: 100px;
-  border-radius: 50%;
-  cursor: pointer;
-  animation: floatUp linear infinite;
+    position: absolute;
+    bottom: -200px;
+    border-radius: 50%;
+    cursor: pointer;
+    animation: riseUp 4s ease-out forwards;
+    z-index: 20;
+}
+
+.float {
+    animation: floatIdle 4s ease-in-out infinite alternate;
 }
 
 .balloon::after {
-  content: '';
-  position: absolute;
-  width: 2px;
-  height: 50px;
-  background: #333;
-  bottom: -50px;
-  left: 50%;
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 60px;
+    background: white;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
 }
 
-@keyframes floatUp {
-  from { transform: translateY(100vh); }
-  to { transform: translateY(-150px); }
+@keyframes riseUp {
+    to { transform: translateY(-60vh); }
 }
 
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  align-items: center;
-  justify-content: center;
+@keyframes floatIdle {
+    from { transform: translateY(-60vh) translateX(-10px); }
+    to { transform: translateY(-65vh) translateX(10px); }
 }
 
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  max-width: 400px;
-  animation: popIn 0.3s ease;
+.pop {
+    animation: popEffect 0.3s forwards;
 }
 
-.modal-content img {
-  max-width: 100%;
-  border-radius: 10px;
+@keyframes popEffect {
+    to { transform: scale(0); opacity: 0; }
 }
 
-@keyframes popIn {
-  from { transform: scale(0.5); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+/* Popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: white;
+    color: #ff4d88;
+    padding: 20px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 380px;
+    max-height: 80vh;       /* limit popup height */
+    overflow-y: auto;       /* enable vertical scroll if needed */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 100;
+    transition: 0.3s;
 }
 
-.close {
-  margin-top: 10px;
-  padding: 8px 20px;
-  border: none;
-  border-radius: 20px;
-  background: #ff4d6d;
-  color: white;
-  cursor: pointer;
+.popup img {
+    width: 100%;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.popup p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.popup.show {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.closeBtn {
+    margin-top: 10px;
+    padding: 8px 18px;
+    border: none;
+    background: #ff4d88;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    top: -10px;
+    z-index: 200;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+    }
+}
+
+/* Final message */
+.finalMessage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: #ff4d88;
+    padding: 40px;
+    border-radius: 25px;
+    font-size: 1.6rem;
+    text-align: center;
+    z-index: 300;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    min-height: 120px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <img id="popupImage" src="">
-    <h2 id="popupMessage"></h2>
-    <button class="close" onclick="closeModal()">Close</button>
-  </div>
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mp3" />
+</audio>
+
+<audio id="popSound" preload="auto">
+    <source src="pop.mp3" type="audio/mp3" />
+</audio>
+
+<div class="content">
+    <h1>HAPPY VALENTINES DAY SWEEETIEEEEEEEEEE</h1>
+    <h2>Pop the balloons to relive our memories ❤️</h2>
+    <div class="counter">Memories left: <span id="memoryCount"></span></div>
 </div>
 
+<div class="popup" id="popup"></div>
+
 <script>
-const balloonData = [
-  {
-    color: "#ff4d6d",
-    image: "image1.jpg",
-    message: "You popped a surprise! 🎉"
-  },
-  {
-    color: "#4dabf7",
-    image: "image2.jpg",
-    message: "Keep going, you're doing great 🚀"
-  },
-  {
-    color: "#ffd43b",
-    image: "image3.jpg",
-    message: "Dream big 💫"
-  }
+const memories = [
+    { img: "Mem1.jpg", text: "aw i love this day so much, the sweet sleep on our way back, trying to fly a kite, just wander alone on the beach, has to be one of the cutest days we had together, our sweeet beach party day" },
+    { img: "Mem2.jpg", text: "HOLY i still remember the chaos of this day😂, you seeing bakhtiar and how i made all this happen goddamn, and the flowersssssssss:@ meine mana kra tha usko, but somehow you love flowers now hehe, id get my sweetheart all the flowers" },
+    { img: "Mem3.jpg", text: "Our cute Miyoko💕, I love building this brand with my girl, supporting what she likes, yeah we haveeee some argumeeeents in bettweeeen but ishokay we resolve and we move on okay? We are stronger than thatttttt" },
+    { img: "Mem4.jpg", text: "This has got to be the funnessttt day of em all, ush having fun on rides and bas friends being friends, and full day with you<3 and this is the smexiest picture of us in 7 years lmao😂and yes ill put you on claw again ANYTTIME" },
+    { img: "Mem5.jpg", text: "I love when we go on stuff that we would do if we were married, like grocery and doing home stuff, it makes me happy to think I'd be building a home with my childhood sweetheart, Inshallah💕" },
+    { img: "Mem6.jpg", text: "this is the coziest little achanak waliiiii date💘les do it again some day, have breakfast and some coffee in car?" }
 ];
 
-function createBalloon(data) {
-  const balloon = document.createElement("div");
-  balloon.classList.add("balloon");
-  balloon.style.background = data.color;
-  balloon.style.left = Math.random() * 90 + "vw";
-  balloon.style.animationDuration = (6 + Math.random() * 5) + "s";
+let maxBalloons = memories.length;
+let popped = 0;
+let lastMemoryReached = false;
 
-  balloon.addEventListener("click", () => {
-    balloon.remove();
-    showModal(data.image, data.message);
-  });
+document.getElementById("memoryCount").innerText = maxBalloons;
 
-  document.body.appendChild(balloon);
+document.body.addEventListener("click", () => {
+    document.getElementById("bgMusic").play();
+}, { once: true });
+
+function createBalloon(index) {
+    const balloon = document.createElement("div");
+    balloon.classList.add("balloon");
+    balloon.dataset.index = index;
+
+    const size = Math.random() * 50 + 70;
+    balloon.style.width = size + "px";
+    balloon.style.height = size * 1.2 + "px";
+
+    const colors = ["#ff4d88", "#ff1a66", "#ff66b3", "#ff99cc", "#ff3366"];
+    balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    const sectionWidth = window.innerWidth / maxBalloons;
+    const minLeft = sectionWidth * index;
+    const maxLeft = minLeft + sectionWidth - size;
+    balloon.style.left = Math.random() * (maxLeft - minLeft) + minLeft + "px";
+
+    document.body.appendChild(balloon);
+    setTimeout(() => balloon.classList.add("float"), 4000);
+    balloon.addEventListener("click", () => popBalloon(balloon));
 }
 
-function showModal(img, message) {
-  document.getElementById("popupImage").src = img;
-  document.getElementById("popupMessage").innerText = message;
-  document.getElementById("modal").style.display = "flex";
+function popBalloon(balloon) {
+    const index = balloon.dataset.index;
+
+    const popAudio = document.getElementById("popSound");
+    popAudio.currentTime = 0;
+    popAudio.play();
+
+    balloon.classList.add("pop");
+    setTimeout(() => balloon.remove(), 300);
+
+    popped++;
+    document.getElementById("memoryCount").innerText = maxBalloons - popped;
+
+    showMemory(memories[index]);
+
+    if (popped === maxBalloons) {
+        lastMemoryReached = true;
+    }
 }
 
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
+function showMemory(memory) {
+    const popup = document.getElementById("popup");
+    popup.innerHTML = `
+        <img src="${memory.img}" alt="Memory Image">
+        <p>${memory.text}</p>
+        <button class="closeBtn" onclick="closePopup()">Close</button>
+    `;
+    popup.classList.add("show");
 }
 
-setInterval(() => {
-  const randomBalloon = balloonData[Math.floor(Math.random() * balloonData.length)];
-  createBalloon(randomBalloon);
-}, 1000);
+function closePopup() {
+    const popup = document.getElementById("popup");
+    popup.classList.remove("show");
 
+    if (lastMemoryReached) {
+        lastMemoryReached = false;
+        setTimeout(() => showFinishPopup(), 300);
+    }
+}
+
+function showFinishPopup() {
+    const popup = document.getElementById("popup");
+    popup.innerHTML = `
+        <p style="font-weight:600;font-size:1.3rem;">
+            You've unlocked all our memories ❤️
+        </p>
+        <button class="closeBtn" onclick="startCelebration()">Finish Memories 🎉</button>
+    `;
+    popup.classList.add("show");
+}
+
+function startCelebration() {
+    closePopup();
+    launchConfetti();
+    showFinalMessage();
+}
+
+function launchConfetti() {
+    for (let i = 0; i < 150; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+
+        const colors = ["#ff4d88", "#ffd700", "#ffffff", "#ff66b3"];
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+    }
+}
+
+function showFinalMessage() {
+    const final = document.createElement("div");
+    final.classList.add("finalMessage");
+
+    const textElement = document.createElement("div");
+    final.appendChild(textElement);
+    document.body.appendChild(final);
+
+    const message = "I love you sweetheart💕I know things aren't the best but we push through? Together? I love you a lot and I'd never want to lose what we have, yeah its hard sometimes but its also sweet, cozy, and loving, im always here for you<3 even if I don't tell you a lot i miss you, i always do, anytime something happens like i see something related to building a home I think of you, whenever I think of having a future youre the first person i think about bec you are my person, you are someone I would love to build a home with<3inshallah everything will be fine and we will be back to being the loving ayu shotu we are yes? :hugs: I love you my dummy bear<3 I always do..";
+
+    let i = 0;
+    function typeWriter() {
+        if (i < message.length) {
+            if (message.charAt(i) === "\n") {
+                textElement.innerHTML += "<br>";
+            } else {
+                textElement.innerHTML += message.charAt(i);
+            }
+            i++;
+            setTimeout(typeWriter, 40);
+        }
+    }
+    typeWriter();
+}
+
+/* Sparkles */
+for (let i = 0; i < 40; i++) {
+    const sparkle = document.createElement("div");
+    sparkle.classList.add("sparkle");
+    sparkle.style.left = Math.random() * 100 + "vw";
+    sparkle.style.top = Math.random() * 100 + "vh";
+    sparkle.style.animationDelay = Math.random() * 2 + "s";
+    document.body.appendChild(sparkle);
+}
+
+/* Create balloons */
+for (let i = 0; i < maxBalloons; i++) {
+    setTimeout(() => createBalloon(i), i * 800);
+}
 </script>
 
 </body>
